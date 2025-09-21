@@ -39,7 +39,9 @@ alias flutter-clean="flutter clean && flutter pub get"
 ## Quick Start
 
 ```bash
-# Install
+# Install (choose one)
+brew tap shamith16/dotwaifu && brew install dotwaifu
+# OR
 curl -sSL https://raw.githubusercontent.com/shamith16/dotwaifu/main/install.sh | bash
 
 # Setup (interactive, safe)
@@ -94,7 +96,13 @@ Your shell RC file sources all configurations efficiently:
 
 ## Installation Options
 
-### One-Line Install (Recommended)
+### Homebrew (macOS/Linux)
+```bash
+brew tap shamith16/dotwaifu
+brew install dotwaifu
+```
+
+### One-Line Install
 ```bash
 curl -sSL https://raw.githubusercontent.com/shamith16/dotwaifu/main/install.sh | bash
 ```
