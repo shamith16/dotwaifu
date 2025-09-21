@@ -25,6 +25,7 @@ func init() {
 	rootCmd.AddCommand(initCmd)
 	rootCmd.AddCommand(setupCmd)
 	rootCmd.AddCommand(editCmd)
+	rootCmd.AddCommand(reloadCmd)
 	rootCmd.AddCommand(exportCmd)
 	rootCmd.AddCommand(uninstallCmd)
 	rootCmd.AddCommand(syncCmd)

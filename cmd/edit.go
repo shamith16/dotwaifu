@@ -110,6 +110,10 @@ func runEdit(cmd *cobra.Command, args []string) {
 		fmt.Printf("Error opening editor: %v\n", err)
 		return
 	}
+
+	fmt.Println("\nTo apply your changes:")
+	fmt.Printf("• Run 'dotwaifu reload' to reload configuration\n")
+	fmt.Printf("• Or manually: 'source ~/.bashrc' (or ~/.zshrc)\n")
 }
 
 func contains(slice []string, item string) bool {

@@ -30,6 +30,9 @@ func runInit(cmd *cobra.Command, args []string) {
 	}
 
 	// Simple editor selection
+	fmt.Println("Choose an editor for 'dotwaifu edit' commands.")
+	fmt.Println("Make sure the editor command is available in your PATH (e.g., 'code', 'vim', 'nano').")
+
 	var editor string
 	editorPrompt := &survey.Input{
 		Message: "What editor do you use for editing files?",
@@ -151,6 +154,9 @@ func runInit(cmd *cobra.Command, args []string) {
 			fmt.Printf("• Check %s/shell/templates/examples/ for inspiration\n", config.GetConfigDir())
 		}
 		fmt.Printf("• Run 'dotwaifu sync' to save changes to git\n")
-		fmt.Printf("\nTip: Changes take effect after restarting your shell or running 'source %s'\n", shell.GetRCFilePath(detectedShell))
+		fmt.Printf("\nIMPORTANT: After editing configs, apply changes with:\n")
+		fmt.Printf("• 'dotwaifu reload' (easy way)\n")
+		fmt.Printf("• 'source %s' (manual way)\n", shell.GetRCFilePath(detectedShell))
+		fmt.Printf("• or restart your terminal\n")
 	}
 }
