@@ -111,6 +111,13 @@ export SAVEHIST=10000
 
 	for filename, content := range examples {
 		filePath := filepath.Join(examplesDir, filename)
+
+		// Only create file if it doesn't exist to preserve user modifications
+		if _, err := os.Stat(filePath); err == nil {
+			// File exists, don't overwrite
+			continue
+		}
+
 		if err := os.WriteFile(filePath, []byte(content), 0644); err != nil {
 			return err
 		}
