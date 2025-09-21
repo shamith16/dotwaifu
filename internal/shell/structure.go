@@ -31,6 +31,13 @@ func CreateBasicStructure() error {
 	coreDir := filepath.Join(configDir, "shell", "shared", "core")
 	for filename, content := range coreFiles {
 		filePath := filepath.Join(coreDir, filename)
+
+		// Only create file if it doesn't exist to preserve user content
+		if _, err := os.Stat(filePath); err == nil {
+			// File exists, don't overwrite
+			continue
+		}
+
 		if err := os.WriteFile(filePath, []byte(content), 0644); err != nil {
 			return err
 		}
@@ -135,5 +142,12 @@ func CreateProjectConfig(projectName, configType string) error {
 	}
 
 	filePath := filepath.Join(projectDir, configType+".sh")
+
+	// Only create file if it doesn't exist to preserve user content
+	if _, err := os.Stat(filePath); err == nil {
+		// File exists, don't overwrite
+		return nil
+	}
+
 	return os.WriteFile(filePath, []byte(content), 0644)
 }
