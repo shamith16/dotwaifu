@@ -1,21 +1,19 @@
 # dotwaifu ✨
 
-[![Go](https://github.com/shamith16/dotwaifu/actions/workflows/build.yml/badge.svg)](https://github.com/shamith16/dotwaifu/actions/workflows/build.yml)
 [![Release](https://img.shields.io/github/v/release/shamith16/dotwaifu)](https://github.com/shamith16/dotwaifu/releases)
-[![Go Report Card](https://goreportcard.com/badge/github.com/shamith16/dotwaifu)](https://goreportcard.com/report/github.com/shamith16/dotwaifu)
 [![Downloads](https://img.shields.io/github/downloads/shamith16/dotwaifu/total)](https://github.com/shamith16/dotwaifu/releases)
 
 > Your helpful companion for organized shell configurations
 
-A modular dotfiles manager that turns messy `.zshrc` files into clean, organized configurations. Perfect for developers who switch machines frequently or just want their shell setup to not suck.
+A modular dotfiles manager that turns messy shell configurations into clean, organized files. Perfect for developers who switch machines frequently or just want their shell setup to not suck.
 
 ## Why dotwaifu?
 
-❌ **Before**: 200-line `.zshrc` files that nobody wants to touch
+❌ **Before**: 200-line shell files that nobody wants to touch
 ✅ **After**: Clean, modular configs organized by purpose and project
 
 ```bash
-# Instead of this mess in .zshrc:
+# Instead of this mess in your shell config:
 export PATH="/usr/local/bin:$PATH"
 export PATH="$HOME/.pub-cache/bin:$PATH"
 alias ll="ls -la"
@@ -55,10 +53,10 @@ dotwaifu edit env nodejs         # Add Node.js environment variables
 
 ## The Problem dotwaifu Solves
 
-**For Mac resetters** 🍎: Stop manually recreating your shell setup every time
-**For multi-project devs** 💻: Keep Flutter configs separate from Python configs
+**For frequent machine switchers** 🔄: Stop manually recreating your shell setup every time
+**For multi-project developers** 💻: Keep Flutter configs separate from Python configs
 **For team leads** 👥: Share clean, organized configurations with your team
-**For shell perfectionists** ✨: Finally organize that 300-line `.zshrc`
+**For shell perfectionists** ✨: Finally organize that 300-line shell configuration
 
 ## Command Reference
 
@@ -141,34 +139,9 @@ dotwaifu sync
 # Export everything to a single file (migration/backup)
 dotwaifu export > my-dotfiles.sh
 
-# Clean uninstall (restores original .zshrc)
+# Clean uninstall (restores original shell config)
 dotwaifu uninstall
 ```
-
-## Community & Contributions
-
-### 🎯 **Looking for Contributors**
-- **Documentation**: Help improve examples and use cases
-- **Templates**: Create project-specific configuration templates
-- **Platforms**: Test and improve Windows/Linux support
-- **Features**: Add new commands and functionality
-
-### 💡 **Share Your Configs**
-Tag your dotwaifu configurations with `#dotwaifu` and share:
-- Useful aliases and functions
-- Project-specific setups
-- Creative organization patterns
-
-### 🐛 **Found a Bug?**
-[Open an issue](https://github.com/shamith16/dotwaifu/issues) with:
-- Your OS and shell
-- Steps to reproduce
-- Expected vs actual behavior
-
-### 💬 **Discussions**
-- Ask questions in [Discussions](https://github.com/shamith16/dotwaifu/discussions)
-- Share your setup and get feedback
-- Request new features
 
 ## FAQ
 
@@ -176,7 +149,7 @@ Tag your dotwaifu configurations with `#dotwaifu` and share:
 A: No! dotwaifu creates a backup of your existing RC file and only appends its loading logic.
 
 **Q: How do I migrate back to a single file?**
-A: Run `dotwaifu export > ~/.zshrc` then `dotwaifu uninstall`
+A: Run `dotwaifu export > ~/.bashrc` (or ~/.zshrc) then `dotwaifu uninstall`
 
 **Q: Can I use this with existing dotfiles frameworks?**
 A: Yes! dotwaifu is designed to complement, not replace, existing setups.
@@ -210,5 +183,3 @@ git push origin v0.2.0
 ⭐ **Star this repo** if dotwaifu helped organize your dotfiles!
 
 🐛 **Found an issue?** [Report it here](https://github.com/shamith16/dotwaifu/issues)
-
-💬 **Questions?** [Start a discussion](https://github.com/shamith16/dotwaifu/discussions)
