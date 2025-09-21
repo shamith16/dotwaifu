@@ -55,9 +55,17 @@ echo "✅ dotwaifu installed to $INSTALL_DIR/dotwaifu"
 
 # Add to PATH if needed
 if [[ ":$PATH:" != *":$INSTALL_DIR:"* ]] && [ "$INSTALL_DIR" = "$HOME/bin" ]; then
+    # Detect shell and suggest appropriate RC file
+    CURRENT_SHELL=$(basename "$SHELL")
+    case $CURRENT_SHELL in
+        zsh) RC_FILE="~/.zshrc" ;;
+        bash) RC_FILE="~/.bashrc" ;;
+        *) RC_FILE="~/.profile" ;;
+    esac
+
     echo "⚠️  Add $INSTALL_DIR to your PATH:"
-    echo "  echo 'export PATH=\"$INSTALL_DIR:\$PATH\"' >> ~/.zshrc"
-    echo "  source ~/.zshrc"
+    echo "  echo 'export PATH=\"$INSTALL_DIR:\$PATH\"' >> $RC_FILE"
+    echo "  source $RC_FILE"
 fi
 
 # Cleanup
