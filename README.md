@@ -30,10 +30,15 @@ alias flutter-clean="flutter clean && flutter pub get"
 ## Features
 
 🏗️ **Modular Organization** - Separate files for paths, aliases, env vars, and scripts
+
 🚀 **Project-Specific Configs** - Flutter aliases don't clutter your Node.js projects
+
 🔒 **Non-Destructive** - Works alongside existing configs, never breaks your setup
+
 📦 **Git Integration** - Built-in versioning and sync capabilities
+
 🚪 **Clean Exit** - Export everything or uninstall completely
+
 ⚡ **Fast Setup** - From zero to organized in under 2 minutes
 
 ## Quick Start
@@ -56,8 +61,11 @@ dotwaifu edit env nodejs         # Add Node.js environment variables
 ## The Problem dotwaifu Solves
 
 **For frequent machine switchers** 🔄: Stop manually recreating your shell setup every time
+
 **For multi-project developers** 💻: Keep Flutter configs separate from Python configs
+
 **For team leads** 👥: Share clean, organized configurations with your team
+
 **For shell perfectionists** ✨: Finally organize that 300-line shell configuration
 
 ## Command Reference
