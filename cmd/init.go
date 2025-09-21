@@ -18,6 +18,8 @@ var initCmd = &cobra.Command{
 
 func runInit(cmd *cobra.Command, args []string) {
 	fmt.Println("🌸 Welcome to dotwaifu!")
+	fmt.Println("dotwaifu organizes your shell configuration into modular, manageable files.")
+	fmt.Println()
 
 	detectedShell := shell.DetectShell()
 	fmt.Printf("Detected shell: %s\n", detectedShell)
@@ -45,14 +47,14 @@ func runInit(cmd *cobra.Command, args []string) {
 		{
 			Name: "initbasic",
 			Prompt: &survey.Confirm{
-				Message: "Initialize with basic shell structure?",
+				Message: "Create organized config files? (paths, aliases, environment variables, scripts)",
 				Default: true,
 			},
 		},
 		{
 			Name: "createexamples",
 			Prompt: &survey.Confirm{
-				Message: "Create template files with examples?",
+				Message: "Include example configurations to help you get started?",
 				Default: true,
 			},
 		},
@@ -86,7 +88,11 @@ func runInit(cmd *cobra.Command, args []string) {
 	}
 
 	if answers.InitBasic {
-		fmt.Println("Creating basic shell structure...")
+		fmt.Println("📁 Creating organized config files...")
+		fmt.Printf("   ├── paths.sh (for PATH modifications)\n")
+		fmt.Printf("   ├── aliases.sh (for command shortcuts)\n")
+		fmt.Printf("   ├── env.sh (for environment variables)\n")
+		fmt.Printf("   └── scripts.sh (for utility functions)\n")
 		if err := shell.CreateBasicStructure(); err != nil {
 			fmt.Printf("Error creating shell structure: %v\n", err)
 			return
@@ -94,7 +100,7 @@ func runInit(cmd *cobra.Command, args []string) {
 	}
 
 	if answers.CreateExamples {
-		fmt.Println("Creating example files...")
+		fmt.Println("📝 Creating example files with helpful snippets...")
 		if err := shell.CreateExampleFiles(); err != nil {
 			fmt.Printf("Error creating example files: %v\n", err)
 			return
@@ -104,36 +110,43 @@ func runInit(cmd *cobra.Command, args []string) {
 	hasExistingRC := shell.HasExistingRC(detectedShell)
 	if hasExistingRC {
 		if shell.HasDotwaifuIntegration(detectedShell) {
-			fmt.Printf("Existing %s already has dotwaifu integration.\n", shell.GetRCFileName(detectedShell))
+			fmt.Printf("✅ Your %s already has dotwaifu integration.\n", shell.GetRCFileName(detectedShell))
 		} else {
-			fmt.Printf("Existing %s found. Creating backup...\n", shell.GetRCFileName(detectedShell))
+			fmt.Printf("🔒 Backing up your existing %s...\n", shell.GetRCFileName(detectedShell))
+			fmt.Printf("   Your original file will be saved as %s\n", shell.GetRCFileName(detectedShell)+"_backup")
 			if err := shell.BackupExistingRC(detectedShell); err != nil {
 				fmt.Printf("Error creating backup: %v\n", err)
 				return
 			}
 
-			fmt.Println("Adding dotwaifu integration to existing RC file...")
+			fmt.Printf("🔗 Adding dotwaifu integration to your %s...\n", shell.GetRCFileName(detectedShell))
+			fmt.Println("   This adds a few lines to load your organized configs automatically")
 			if err := shell.AppendToExistingRC(detectedShell); err != nil {
 				fmt.Printf("Error adding integration: %v\n", err)
 				return
 			}
-			fmt.Printf("Existing %s backed up. Tool integration added.\n", shell.GetRCFileName(detectedShell))
+			fmt.Printf("✅ Integration complete! Your original %s is safely backed up.\n", shell.GetRCFileName(detectedShell))
 		}
 	} else {
-		fmt.Printf("Creating new %s...\n", shell.GetRCFileName(detectedShell))
+		fmt.Printf("📄 Creating new %s...\n", shell.GetRCFileName(detectedShell))
 		if err := shell.CreateNewRC(detectedShell); err != nil {
 			fmt.Printf("Error creating RC file: %v\n", err)
 			return
 		}
 	}
 
-	fmt.Println("\n✅ dotwaifu initialization complete!")
-	fmt.Printf("Your shell configuration is now managed in: %s\n", config.GetConfigDir())
-	fmt.Printf("Restart your shell or run: source %s\n", shell.GetRCFilePath(detectedShell))
+	fmt.Println("\n🎉 dotwaifu setup complete!")
+	fmt.Printf("📂 Your organized configs are in: %s\n", config.GetConfigDir())
+	fmt.Printf("🔄 Restart your shell or run: source %s\n", shell.GetRCFilePath(detectedShell))
 
 	if answers.InitBasic {
-		fmt.Printf("\nNext steps:\n")
-		fmt.Printf("• Edit configurations: dotwaifu edit\n")
-		fmt.Printf("• View examples: ls %s/shell/templates/examples/\n", config.GetConfigDir())
+		fmt.Printf("\n🚀 What's next?\n")
+		fmt.Printf("• Edit your configs: dotwaifu edit\n")
+		fmt.Printf("• Add aliases: dotwaifu edit aliases\n")
+		fmt.Printf("• Modify PATH: dotwaifu edit paths\n")
+		if answers.CreateExamples {
+			fmt.Printf("• Check examples: ls %s/shell/templates/examples/\n", config.GetConfigDir())
+		}
+		fmt.Printf("• Version control: dotwaifu sync\n")
 	}
 }
