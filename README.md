@@ -55,11 +55,14 @@ Shell RC files source all configurations at startup:
 ## Installation
 
 ```bash
-# Build from source
-go build -o dotwaifu
+# Quick install (macOS/Linux)
+curl -sSL https://raw.githubusercontent.com/shamith16/dotwaifu/main/install.sh | bash
+
+# Or download from releases
+# Visit: https://github.com/shamith16/dotwaifu/releases
 
 # Initialize your configuration
-./dotwaifu init
+dotwaifu init
 ```
 
 ## Quick Start
