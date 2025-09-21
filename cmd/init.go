@@ -29,50 +29,80 @@ func runInit(cmd *cobra.Command, args []string) {
 		detectedShell = "zsh"
 	}
 
-	var answers struct {
-		Editor         string
-		InitBasic      bool
-		CreateExamples bool
-	}
 
-	questions := []*survey.Question{
-		{
-			Name: "editor",
-			Prompt: &survey.Select{
-				Message: "What's your preferred editor?",
-				Options: []string{"vi", "nano", "code", "codium", "cursor", "windsurf", "custom"},
-				Default: "code",
-			},
-		},
-		{
-			Name: "initbasic",
-			Prompt: &survey.Confirm{
-				Message: "Create organized config files? (paths, aliases, environment variables, scripts)",
-				Default: true,
-			},
-		},
-		{
-			Name: "createexamples",
-			Prompt: &survey.Confirm{
-				Message: "Include example configurations to help you get started?",
-				Default: true,
-			},
-		},
+	// Interactive editor selection with help
+	var editor string
+	editorPrompt := &survey.Input{
+		Message: "Editor (press Enter for code)",
+		Help:    "Used by `dotwaifu edit`. Examples: code, nvim, vim, subl\nChange later: `dotwaifu config set editor=<name>`",
+		Default: "code",
 	}
-
-	err := survey.Ask(questions, &answers)
+	err := survey.AskOne(editorPrompt, &editor)
 	if err != nil {
 		fmt.Printf("Error during setup: %v\n", err)
 		return
 	}
 
-	if answers.Editor == "custom" {
-		customEditor := ""
-		prompt := &survey.Input{
-			Message: "Enter your custom editor command:",
+	// Validate editor choice
+	validEditors := []string{"vi", "nano", "code", "codium", "cursor", "windsurf", "nvim", "vim", "subl", "emacs"}
+	isValidEditor := false
+	for _, valid := range validEditors {
+		if editor == valid {
+			isValidEditor = true
+			break
 		}
-		survey.AskOne(prompt, &customEditor)
-		answers.Editor = customEditor
+	}
+	if !isValidEditor && editor != "" {
+		// Allow custom editors but confirm
+		var useCustom bool
+		survey.AskOne(&survey.Confirm{
+			Message: fmt.Sprintf("Use custom editor '%s'?", editor),
+			Default: true,
+		}, &useCustom)
+		if !useCustom {
+			editor = "code"
+		}
+	}
+
+	// Config files creation with preview
+	var createConfigs bool
+	configPrompt := &survey.Confirm{
+		Message: "Create organized config files?",
+		Help: `Preview:
+  + ~/.config/dotwaifu/shell/shared/core/paths.sh
+  + ~/.config/dotwaifu/shell/shared/core/aliases.sh
+  + ~/.config/dotwaifu/shell/shared/core/env.sh
+  + ~/.config/dotwaifu/shell/shared/core/scripts.sh
+  + Adds loading logic to ~/` + shell.GetRCFileName(detectedShell) + ` (safely appended)`,
+		Default: true,
+	}
+	err = survey.AskOne(configPrompt, &createConfigs)
+	if err != nil {
+		fmt.Printf("Error during setup: %v\n", err)
+		return
+	}
+
+	// Examples with explanation
+	var createExamples bool
+	examplePrompt := &survey.Confirm{
+		Message: "Include commented examples to get you started?",
+		Help:    "Safe: examples are commented out; no behavior change until you uncomment.\nExamples include common aliases, PATH modifications, and environment variables.",
+		Default: true,
+	}
+	err = survey.AskOne(examplePrompt, &createExamples)
+	if err != nil {
+		fmt.Printf("Error during setup: %v\n", err)
+		return
+	}
+
+	answers := struct {
+		Editor         string
+		InitBasic      bool
+		CreateExamples bool
+	}{
+		Editor:         editor,
+		InitBasic:      createConfigs,
+		CreateExamples: createExamples,
 	}
 
 	cfg := &config.Config{
@@ -136,6 +166,7 @@ func runInit(cmd *cobra.Command, args []string) {
 	}
 
 	fmt.Println("\n🎉 dotwaifu setup complete!")
+	fmt.Printf("✓ Editor: %s — change anytime with `dotwaifu config set editor=...`\n", answers.Editor)
 	fmt.Printf("📂 Your organized configs are in: %s\n", config.GetConfigDir())
 	fmt.Printf("🔄 Restart your shell or run: source %s\n", shell.GetRCFilePath(detectedShell))
 
