@@ -1,109 +1,214 @@
-# dotwaifu
+# dotwaifu ✨
 
-A modular dotfiles manager that organizes your shell configurations.
+[![Go](https://github.com/shamith16/dotwaifu/actions/workflows/build.yml/badge.svg)](https://github.com/shamith16/dotwaifu/actions/workflows/build.yml)
+[![Release](https://img.shields.io/github/v/release/shamith16/dotwaifu)](https://github.com/shamith16/dotwaifu/releases)
+[![Go Report Card](https://goreportcard.com/badge/github.com/shamith16/dotwaifu)](https://goreportcard.com/report/github.com/shamith16/dotwaifu)
+[![Downloads](https://img.shields.io/github/downloads/shamith16/dotwaifu/total)](https://github.com/shamith16/dotwaifu/releases)
 
-## The Problem
+> Your helpful companion for organized shell configurations
 
-Managing shell configurations becomes messy over time:
-- Monolithic `.zshrc`/`.bashrc` files grow unmanageable
-- No organized way to separate global vs project-specific settings
-- Difficult to share configurations between machines
+A modular dotfiles manager that turns messy `.zshrc` files into clean, organized configurations. Perfect for developers who switch machines frequently or just want their shell setup to not suck.
 
-## The Solution
+## Why dotwaifu?
 
-dotwaifu provides a modular approach to shell configuration management:
-
-- **Modular Organization**: Separate files for paths, aliases, environment variables, and scripts
-- **Project-Specific Configs**: Organize settings by project while maintaining global defaults
-- **Non-Disruptive**: Works alongside existing configurations without breaking them
-- **Git Integration**: Built-in versioning and backup capabilities
-- **Clean Exit**: Export all configurations to a single file or completely uninstall
-
-## Core Principles
-
-1. **Modularity**: Break configurations into logical, manageable pieces
-2. **Non-Destructive**: Never break existing setups - always backup
-3. **Simplicity**: Common tasks should be simple, complex tasks should be possible
-4. **Reversibility**: Every action can be undone with a clear exit strategy
-
-## Architecture
-
-### File Structure
-```
-~/.config/dotwaifu/
-├── shell/
-│   ├── shared/
-│   │   ├── core/
-│   │   │   ├── paths.sh        # Global PATH modifications
-│   │   │   ├── aliases.sh      # Global aliases
-│   │   │   ├── env.sh          # Global environment variables
-│   │   │   └── scripts.sh      # Global utility scripts
-│   │   └── projects/           # Project-specific configurations
-│   │       ├── flutter/
-│   │       └── nestjs/
-│   └── templates/
-│       └── examples/
-├── config.yaml
-└── .git/
-```
-
-### Loading Strategy
-Shell RC files source all configurations at startup:
-1. Load all files from `core/`
-2. Load all files from each project in `projects/`
-
-## Installation
+❌ **Before**: 200-line `.zshrc` files that nobody wants to touch
+✅ **After**: Clean, modular configs organized by purpose and project
 
 ```bash
-# Quick install (macOS/Linux)
-curl -sSL https://raw.githubusercontent.com/shamith16/dotwaifu/main/install.sh | bash
+# Instead of this mess in .zshrc:
+export PATH="/usr/local/bin:$PATH"
+export PATH="$HOME/.pub-cache/bin:$PATH"
+alias ll="ls -la"
+alias flutter-clean="flutter clean && flutter pub get"
+# ... 150 more lines
 
-# Or download from releases
-# Visit: https://github.com/shamith16/dotwaifu/releases
-
-# Initialize your configuration
-dotwaifu init
+# You get this organization:
+~/.config/dotwaifu/shell/shared/
+├── core/paths.sh              # Global PATH modifications
+├── core/aliases.sh            # Global aliases
+└── projects/flutter/aliases.sh # Project-specific aliases
 ```
+
+## Features
+
+🏗️ **Modular Organization** - Separate files for paths, aliases, env vars, and scripts
+🚀 **Project-Specific Configs** - Flutter aliases don't clutter your Node.js projects
+🔒 **Non-Destructive** - Works alongside existing configs, never breaks your setup
+📦 **Git Integration** - Built-in versioning and sync capabilities
+🚪 **Clean Exit** - Export everything or uninstall completely
+⚡ **Fast Setup** - From zero to organized in under 2 minutes
 
 ## Quick Start
 
 ```bash
-# Interactive setup
+# Install
+curl -sSL https://raw.githubusercontent.com/shamith16/dotwaifu/main/install.sh | bash
+
+# Setup (interactive, safe)
 dotwaifu init
 
-# Edit configurations
-dotwaifu edit                    # Show menu
-dotwaifu edit paths              # Edit global paths
-dotwaifu edit aliases flutter    # Edit flutter-specific aliases
+# Start organizing
+dotwaifu edit paths              # Edit global PATH
+dotwaifu edit aliases flutter    # Create Flutter-specific aliases
+dotwaifu edit env nodejs         # Add Node.js environment variables
+```
 
-# Sync changes
+## The Problem dotwaifu Solves
+
+**For Mac resetters** 🍎: Stop manually recreating your shell setup every time
+**For multi-project devs** 💻: Keep Flutter configs separate from Python configs
+**For team leads** 👥: Share clean, organized configurations with your team
+**For shell perfectionists** ✨: Finally organize that 300-line `.zshrc`
+
+## Command Reference
+
+| Command | Purpose | Example |
+|---------|---------|---------|
+| `init` | Interactive setup | `dotwaifu init` |
+| `edit` | Edit configs | `dotwaifu edit paths flutter` |
+| `sync` | Git sync | `dotwaifu sync` |
+| `export` | Export to single file | `dotwaifu export` |
+| `uninstall` | Clean removal | `dotwaifu uninstall` |
+
+## Architecture
+
+### File Organization
+```
+~/.config/dotwaifu/
+├── shell/shared/
+│   ├── core/                    # Global configurations
+│   │   ├── paths.sh
+│   │   ├── aliases.sh
+│   │   ├── env.sh
+│   │   └── scripts.sh
+│   └── projects/                # Project-specific configs (created on-demand)
+│       ├── flutter/
+│       ├── nodejs/
+│       └── python/
+└── .git/                        # Automatic version control
+```
+
+### Loading Strategy
+Your shell RC file sources all configurations efficiently:
+1. Load all global configs from `core/`
+2. Load all project configs from `projects/*/`
+3. Everything is shell-agnostic (works with zsh, bash, etc.)
+
+## Installation Options
+
+### One-Line Install (Recommended)
+```bash
+curl -sSL https://raw.githubusercontent.com/shamith16/dotwaifu/main/install.sh | bash
+```
+
+### Manual Install
+1. Download from [releases](https://github.com/shamith16/dotwaifu/releases)
+2. Extract binary to your PATH
+3. Run `dotwaifu init`
+
+### Build from Source
+```bash
+git clone https://github.com/shamith16/dotwaifu.git
+cd dotwaifu
+go build -o dotwaifu
+./dotwaifu init
+```
+
+## Examples
+
+### Basic Setup
+```bash
+# Initialize
+dotwaifu init
+
+# Add some global aliases
+dotwaifu edit aliases
+# Add: alias ll="ls -la"
+
+# Create Flutter-specific configs
+dotwaifu edit paths flutter
+# Add: export PATH="$PATH:$HOME/flutter/bin"
+
+dotwaifu edit aliases flutter
+# Add: alias fclean="flutter clean && flutter pub get"
+```
+
+### Advanced Usage
+```bash
+# Sync with git
 dotwaifu sync
 
-# Export everything to single file
-dotwaifu export
+# Export everything to a single file (migration/backup)
+dotwaifu export > my-dotfiles.sh
 
-# Clean uninstall
+# Clean uninstall (restores original .zshrc)
 dotwaifu uninstall
 ```
 
-## Commands
+## Community & Contributions
 
-- `init` - Interactive setup wizard
-- `edit [type] [project]` - Edit configuration files
-- `setup -r <repo>` - Setup from existing repository
-- `sync` - Commit and sync changes to git
-- `export` - Export all configs to single RC file
-- `uninstall` - Remove integration and restore backup
+### 🎯 **Looking for Contributors**
+- **Documentation**: Help improve examples and use cases
+- **Templates**: Create project-specific configuration templates
+- **Platforms**: Test and improve Windows/Linux support
+- **Features**: Add new commands and functionality
+
+### 💡 **Share Your Configs**
+Tag your dotwaifu configurations with `#dotwaifu` and share:
+- Useful aliases and functions
+- Project-specific setups
+- Creative organization patterns
+
+### 🐛 **Found a Bug?**
+[Open an issue](https://github.com/shamith16/dotwaifu/issues) with:
+- Your OS and shell
+- Steps to reproduce
+- Expected vs actual behavior
+
+### 💬 **Discussions**
+- Ask questions in [Discussions](https://github.com/shamith16/dotwaifu/discussions)
+- Share your setup and get feedback
+- Request new features
+
+## FAQ
+
+**Q: Will this break my existing shell setup?**
+A: No! dotwaifu creates a backup of your existing RC file and only appends its loading logic.
+
+**Q: How do I migrate back to a single file?**
+A: Run `dotwaifu export > ~/.zshrc` then `dotwaifu uninstall`
+
+**Q: Can I use this with existing dotfiles frameworks?**
+A: Yes! dotwaifu is designed to complement, not replace, existing setups.
+
+**Q: What shells are supported?**
+A: zsh, bash, and any POSIX-compatible shell. Configs use `.sh` extension for maximum compatibility.
 
 ## Development
 
+### Local Development
 ```bash
-# Install dependencies
+# Clone and build
+git clone https://github.com/shamith16/dotwaifu.git
+cd dotwaifu
 go mod tidy
-
-# Build
 go build -o dotwaifu
 
-# Test
+# Test your changes
 ./dotwaifu init
 ```
+
+### Release Process
+Releases are automated via GitHub Actions on git tags:
+```bash
+git tag v0.2.0
+git push origin v0.2.0
+```
+
+---
+
+⭐ **Star this repo** if dotwaifu helped organize your dotfiles!
+
+🐛 **Found an issue?** [Report it here](https://github.com/shamith16/dotwaifu/issues)
+
+💬 **Questions?** [Start a discussion](https://github.com/shamith16/dotwaifu/discussions)
